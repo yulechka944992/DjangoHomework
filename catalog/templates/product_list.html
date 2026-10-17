@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Все товары — Skystore{% endblock %}
+{% block page_title %}Все товары{% endblock %}
+
+{% block content %}
+<div class="row text-center">
+    {% for product in page_obj %}
+        {% include 'includes/_product_card.html' %}
+    {% empty %}
+        <p>Товаров пока нет</p>
+    {% endfor %}
+</div>
+<div class="pagination mt-4 d-flex justify-content-center">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn btn-outline-primary btn-sm">&laquo; Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary btn-sm">Назад</a>
+        {% endif %}
+
+        <span class="current mx-2">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-primary btn-sm">Вперед</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-primary btn-sm">Последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

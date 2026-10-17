@@ -1,0 +1,18 @@
+<div class="col-3">
+    <div class="card mb-4 box-shadow">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+        {% endif %}
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
+            <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                <li>{{ product.description|truncatechars:100 }}</li>
+            </ul>
+            <a href="{% url 'catalog:product_detail' product.pk %}"
+               class="btn btn-lg btn-block btn-outline-primary">Подробнее</a>
+        </div>
+    </div>
+</div>
