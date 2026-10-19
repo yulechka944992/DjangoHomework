@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+{% block page_title %}{{ product.name }}{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="card mb-4 box-shadow">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% endif %}
+            
+            <div class="card-body">
+                <table class="table table-striped">
+                    <tr><td class="w-25">Наименование</td><td>{{ product.name }}</td></tr>
+                    <tr><td class="w-25">Описание</td><td>{{ product.description }}</td></tr>
+                    <tr><td class="w-25">Цена</td><td>{{ product.price }} ₽</td></tr>
+                    {% if product.category %}
+                        <tr><td class="w-25">Категория</td><td>{{ product.category }}</td></tr>
+                    {% endif %}
+                    <tr><td class="w-25">Дата создания</td><td>{{ product.created_at|date:"d.m.Y H:i" }}</td></tr>
+                    <tr><td class="w-25">Последнее изменение</td><td>{{ product.updated_at|date:"d.m.Y H:i" }}</td></tr>
+                </table>
+                <a href="{% url 'catalog:home' %}" class="btn btn-outline-primary">← Назад в каталог</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
