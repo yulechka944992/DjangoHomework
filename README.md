@@ -147,7 +147,7 @@ python manage.py runserver
 
 - Добавление товара: http://127.0.0.1:8000/products/create/
 
-- Блог: http://127.0.0.1:8000/blog/
+- Блог: http://127.0.0.1:8000/blogs/
 
 - Контакты: http://127.0.0.1:8000/contacts/
 
