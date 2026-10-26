@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="row text-center">
-    {% for product in page_obj %}
+    {% for product in products %}
         {% include 'includes/_product_card.html' %}
     {% empty %}
         <p>Товаров пока нет</p>

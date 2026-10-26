@@ -23,7 +23,11 @@
                     <tr><td class="w-25">Дата создания</td><td>{{ product.created_at|date:"d.m.Y H:i" }}</td></tr>
                     <tr><td class="w-25">Последнее изменение</td><td>{{ product.updated_at|date:"d.m.Y H:i" }}</td></tr>
                 </table>
-                <a href="{% url 'catalog:home' %}" class="btn btn-outline-primary">← Назад в каталог</a>
+                <div class="d-flex gap-2 mt-3">
+                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+                    <a href="{% url 'catalog:home' %}" class="btn btn-outline-primary">← Назад в каталог</a>
+                </div>
             </div>
         </div>
     </div>

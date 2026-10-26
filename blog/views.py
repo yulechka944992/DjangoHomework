@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import BlogPost
+from django import forms
 
 
 class BlogListView(ListView):
@@ -31,11 +32,25 @@ class BlogCreateView(CreateView):
     fields = ['title', 'content', 'preview', 'is_published']
     success_url = reverse_lazy('blog:blog_list')
 
+    widgets = {
+        'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        'title': forms.TextInput(attrs={'class': 'form-control'}),
+        'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        'preview': forms.FileInput(attrs={'class': 'form-control'}),
+    }
+
 
 class BlogUpdateView(UpdateView):
     model = BlogPost
     template_name = 'blog/blog_form.html'
     fields = ['title', 'content', 'preview', 'is_published']
+
+    widgets = {
+        'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        'title': forms.TextInput(attrs={'class': 'form-control'}),
+        'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        'preview': forms.FileInput(attrs={'class': 'form-control'}),
+    }
 
 
     def get_success_url(self):
