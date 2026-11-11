@@ -1,5 +1,7 @@
 from django.db import models
 
+from config import settings
+
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name="Наименование продукта")
@@ -21,6 +23,13 @@ class Product(models.Model):
         auto_now=True, verbose_name="Дата последнего изменения"
     )
     is_published = models.BooleanField(default=False, verbose_name="Опубликован")
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Владелец",
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.name
