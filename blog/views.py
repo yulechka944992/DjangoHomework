@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import BlogPost
@@ -32,6 +33,11 @@ class BlogCreateView(CreateView):
     fields = ['title', 'content', 'preview', 'is_published']
     success_url = reverse_lazy('blog:blog_list')
 
+    def get(self, request, *args, **kwargs):
+        if not request.user.has_perm('blog.add_blogpost'):
+            raise PermissionDenied
+        return super().get(request, *args, **kwargs)
+
     widgets = {
         'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -44,6 +50,12 @@ class BlogUpdateView(UpdateView):
     model = BlogPost
     template_name = 'blog/blog_form.html'
     fields = ['title', 'content', 'preview', 'is_published']
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if not self.request.user.has_perm('blog.change_blogpost'):
+            raise PermissionDenied
+        return obj
 
     widgets = {
         'is_published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
@@ -60,3 +72,9 @@ class BlogDeleteView(DeleteView):
     model = BlogPost
     template_name = 'blog/blog_confirm_delete.html'
     success_url = reverse_lazy('blog:blog_list')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if not self.request.user.has_perm('blog.delete_blogpost'):
+            raise PermissionDenied
+        return obj
