@@ -1,6 +1,5 @@
-from gc import get_objects
-
-from django.shortcuts import render
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, UpdateView, DeleteView
@@ -18,6 +17,18 @@ class HomeListView(ListView):
 
     def get_queryset(self):
         return Product.objects.order_by('-created_at')[:5]
+
+
+class ProductUnpublishView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        if not request.user.has_perm('catalog.can_unpublish_product'):
+            raise PermissionDenied
+
+        product = get_object_or_404(Product, pk=pk)
+        product.is_published = False
+        product.save()
+
+        return redirect('catalog:product_detail', pk=product.pk)
 
 
 class ProductListView(ListView):
@@ -52,6 +63,11 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'product_confirm_delete.html'
     success_url = reverse_lazy('catalog:product_list')
+
+    def get_object(self, queryset=None):
+        if not self.request.user.has_perm('catalog.delete_product'):
+            raise PermissionDenied
+        return super().get_object(queryset)
 
 
 class ContactsView(View):
