@@ -6,7 +6,9 @@
 {% block content %}
 <div class="row">
     <div class="col-12 mb-3">
-        <a href="{% url 'blog:blog_create' %}" class="btn btn-success">+ Новая запись</a>
+        {% if perms.blog.add_blogpost %}
+            <a href="{% url 'blog:blog_create' %}" class="btn btn-success">+ Новая запись</a>
+        {% endif %}
     </div>
     {% for post in posts %}
         <div class="col-md-4 mb-4">
