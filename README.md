@@ -58,8 +58,11 @@ DB_USER=user_name
 DB_PASSWORD=your_db_password
 DB_HOST=localhost
 DB_PORT=5432
+
 EMAIL_HOST_USER=your_email@yandex.ru
 EMAIL_HOST_PASSWORD=your_password
+
+LOCATION=your_localhost_redis
 
 #### Использование в `settings.py`
 ```python
@@ -302,6 +305,17 @@ Installed 8 object(s) from 1 fixture(s)
     includes/_product_card.html — переиспользуемая карточка товара.
 
     blog/blog_list.html, blog/blog_detail.html, blog/blog_form.html, blog/blog_confirm_delete.html — шаблоны для блога.
+#### Сервисный слой и кэширование (Redis)
+- **Сервисный слой (`catalog/services.py`)**:
+  - Вынесена бизнес-логика получения данных из базы.
+  - Реализована функция получения товаров по категории (`get_products_by_category`).
+  - Реализована функция получения списка всех товаров (`get_cached_products_list`).
+- **Кэширование (Redis)**:
+  - Настроено низкоуровневое кэширование для оптимизации нагрузки на базу данных.
+  - При выводе товаров конкретной категории используется ключ `category_{id}` с временем жизни (TTL) 300 секунд.
+  - При выводе общего списка товаров используется ключ `all_products_list` с TTL 300 секунд.
+- **Страница категории**:
+  - Создано отдельное представление (`ProductByCategoryView`) и шаблон (`category_products.html`) для отображения списка товаров в выбранной категории.
 
 #### Пользователи и аутентификация
 - **Регистрация (`RegisterView`)** — создание пользователя, проверка паролей, отправка приветственного письма через SMTP.
@@ -321,12 +335,14 @@ Installed 8 object(s) from 1 fixture(s)
   - Плашка «Опубликован / Не опубликован» видна только модераторам.
 ### Зависимости
 Полный список зависимостей — в файле requirements.txt.
-Django==6.1.1
-psycopg2-binary==2.9.13
-python-dotenv==1.2.4
-pillow==12.3.0
-ipython==9.17.1
-black==26.10.1
+
+- Django==6.1.1
+- psycopg2-binary==2.9.13
+- python-dotenv==1.2.4
+- pillow==12.3.0
+- ipython==9.17.1
+- black==26.10.1
+- redis==8.1.0
 
 ### Автор
 Кряжева Юлия
